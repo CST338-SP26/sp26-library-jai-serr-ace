@@ -41,11 +41,11 @@ public class Book {
         this.dueDate = dueDate;
     }
 
-    public String getIsbn() {
+    public String getISBN() {
         return isbn;
     }
 
-    public void setIsbn(String isbn) {
+    public void setISBN (String isbn) {
         this.isbn = isbn;
     }
 
@@ -83,6 +83,6 @@ public class Book {
     return Objects.hash(author, isbn, pageCount, subject, title);
     }
     @Override public String toString() {
-    return getTitle() + " by " + getAuthor() + " ISBN: " +getIsbn();
+    return getTitle() + " by " + getAuthor() + " ISBN: " +getISBN();
     }
 }
