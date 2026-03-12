@@ -1,6 +1,15 @@
 import java.time.LocalDate;
 import java.util.Objects;
 
+/**
+* @author Jaime Serrano Acevedo
+* @since: 2026.03.12
+* Abstract: this is the Book class that contains different values and methods to store
+* information about the book such the author, title, ISBN, etc.
+* The information gets stored in a very specific format so that later can be access through
+* index rather than class elements.
+ * */
+
 public class Book {
     public static final int ISBN_ = 0;
     public static final int TITLE_ = 1;
