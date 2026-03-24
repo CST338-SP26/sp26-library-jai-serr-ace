@@ -39,7 +39,7 @@ class ReaderTest {
     int cardNumber_;
     String name_;
     String phone_;
-    List<Book> books_;
+    ArrayList<Book> books_;
 
     Book bookTest;
 
