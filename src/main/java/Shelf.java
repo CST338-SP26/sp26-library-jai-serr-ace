@@ -8,7 +8,7 @@ import java.util.Objects;
 public class Shelf {
     public static final int SHELF_NUMBER_ = 0;
     public static final int SUBJECT_ = 1;
-    private HashMap<Book, Integer> books;
+    private HashMap<Book, Integer> books = new HashMap<>();
     private int shelfNumber;
     private String subject;
 
@@ -18,12 +18,11 @@ public class Shelf {
     public Shelf(int shelfNumber, String subject){
         this.shelfNumber = shelfNumber;
         this.subject = subject;
-        this.books = new HashMap<>();
     }
 
     public Code addBook(Book my_book){
         if(books.containsKey(my_book)){
-            int k = books.get(my_book) + 1;
+            Integer k = books.get(my_book) + 1;
             books.put(my_book,k);
             return Code.SUCCESS;
         }
@@ -34,9 +33,11 @@ public class Shelf {
         return Code.SHELF_SUBJECT_MISMATCH_ERROR;
     }
 
-    public int getBookCount(Book book){
-        int ans = getBooks().get(book);
-        return (ans <= 1) ? ans : -1;
+    public Integer getBookCount(Book book){
+        if(getBooks().containsKey(book)){
+            return getBooks().get(book);
+        }
+        return -1;
     }
 
     public HashMap<Book, Integer> getBooks() {
@@ -77,13 +78,17 @@ public class Shelf {
     }
 
     public Code removeBook(Book book){
-        if(!books.containsKey(book)){
+        if(!getBooks().containsKey(book)){
             return Code.BOOK_NOT_IN_INVENTORY_ERROR;
         }
-        if(books.containsKey(book) && books.get(book) == 0){
+        if(getBooks().containsKey(book) && getBookCount(book) <= 0){
             return Code.BOOK_NOT_IN_INVENTORY_ERROR;
         }
-        books.remove(book);
+        if(getBooks().containsKey(book) && getBookCount(book) >= 1){
+            System.out.println(book);
+            int k = getBookCount(book) - 1;
+            books.put(book,k);
+        }
         return Code.SUCCESS;
     }
 
