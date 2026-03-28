@@ -1,9 +1,17 @@
-//import java.awt.print.Book;
 import Utilities.Code;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
+/**
+ * @author Jaime Serrano Acevedo
+ * @since: 2026.03.28
+ * Abstract: this is the Shelf class. This class stores books from the Book class
+ * in a hashmap which acts as the shelf and the class controls the rest of the access
+ * methods from the shell. Such as the book count, display the list of books, adding and
+ * removing books from the shelf.
+ * */
 
 public class Shelf {
     public static final int SHELF_NUMBER_ = 0;
@@ -85,7 +93,6 @@ public class Shelf {
             return Code.BOOK_NOT_IN_INVENTORY_ERROR;
         }
         if(getBooks().containsKey(book) && getBookCount(book) >= 1){
-            System.out.println(book);
             int k = getBookCount(book) - 1;
             books.put(book,k);
         }
