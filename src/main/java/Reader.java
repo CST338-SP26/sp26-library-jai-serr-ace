@@ -1,6 +1,7 @@
 import Utilities.Code;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -21,7 +22,7 @@ public class Reader {
     private int cardNumber;
     private String name;
     private String phone;
-    private ArrayList<Book> books = new ArrayList<>();
+    private List<Book> books = new ArrayList<>();
 
     public Reader(int cardNumber, String name, String phone) {
         this.cardNumber = cardNumber;
@@ -55,11 +56,11 @@ public class Reader {
         return books.size();
     }
 
-    public ArrayList<Book> getBooks() {
+    public List<Book> getBooks() {
         return books;
     }
 
-    public void setBooks(ArrayList<Book> books) {
+    public void setBooks(List<Book> books) {
         this.books = books;
     }
 
