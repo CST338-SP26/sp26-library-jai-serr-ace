@@ -32,10 +32,12 @@ public class Shelf {
         if(books.containsKey(my_book)){
             Integer k = books.get(my_book) + 1;
             books.put(my_book,k);
+            System.out.println(my_book + "added to shelf " + this);
             return Code.SUCCESS;
         }
         if(my_book.getSubject().equals(getSubject())){
             books.put(my_book,1);
+            System.out.println(my_book + " added to shelf " + this);
             return  Code.SUCCESS;
         }
         return Code.SHELF_SUBJECT_MISMATCH_ERROR;

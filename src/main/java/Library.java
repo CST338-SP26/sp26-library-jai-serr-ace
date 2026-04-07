@@ -1,3 +1,13 @@
+/**
+ * @author Jaime Serrano Acevedo
+ * @since: 2026.04.07
+ * Abstract: this is the Library class. This is primary class of the project. Is the one
+ * that handles and really uses the other methods. As in, it takes books, it put the books
+ * into shelves and allows readers to check out and return books. It has the init methods
+ * which are to fulfill library based on information found in the csv files passed into it.
+ * It offers a general book database (allowing to find books regardless of the shelf) and
+ * lending limit for users borrowing books.
+ * */
 import Utilities.Code;
 
 import java.io.File;
@@ -84,16 +94,29 @@ public class Library {
 
     public Code addShelf(Shelf shelf) {
         if(shelves.containsKey(shelf.getSubject())){
-            if(shelves.get(shelf.getSubject()).equals(shelf)){
-                return Code.SHELF_EXISTS_ERROR;
+            System.out.println("ERROR: Shelf already exists " + shelf);
+            return Code.SHELF_EXISTS_ERROR;
+        }
+
+        shelves.put(shelf.getSubject(), shelf);
+
+        for(Map.Entry<Book, Integer> entry : books.entrySet()){
+            Book book = entry.getKey();
+            int count = entry.getValue();
+            if(book.getSubject().equals(shelf.getSubject())){
+                for (int i = 0; i < count; i++){
+                    shelf.addBook(book);
+                }
             }
         }
-        shelves.put(shelf.getSubject(), shelf);
-        shelf.setShelfNumber(shelf.getShelfNumber() + 1);
         return Code.SUCCESS;
     }
 
     public Code addShelf(String shelf_str){
+        if(shelves.containsKey(shelf_str)){
+            System.out.println("ERROR: Shelf already exists " + getShelf(shelf_str));
+            return Code.SHELF_EXISTS_ERROR;
+        }
         Shelf shelf = new Shelf(1,shelf_str);
         addShelf(shelf);
         return Code.SUCCESS;
@@ -120,14 +143,19 @@ public class Library {
             System.out.println("ERROR: no copies of " + book + " remain");
             return Code.BOOK_NOT_IN_INVENTORY_ERROR;
         }
-        if(read.addBook(book) != Code.SUCCESS){
+        Code c = read.addBook(book);
+        if (c != Code.SUCCESS){
             System.out.println("Couldn't checkout " + book);
-            return read.addBook(book);
+            return c;
         }
-        return shelves.get(book.getSubject()).removeBook(book);
+        c = shelves.get(book.getSubject()).removeBook(book);
+        if(c == Code.SUCCESS) {
+            System.out.println(book + " checked out successfully");
+        }
+        return c;
     }
 
-    public LocalDate convertDate(String date, Code c){
+    public static LocalDate convertDate(String date, Code c){
         LocalDate defaultDate = LocalDate.of(1970, 1, 1);
         if(date.length() != 10){
             return defaultDate;
@@ -201,12 +229,16 @@ public class Library {
     }
 
     public Shelf getShelf(String shelf_str){
-        return shelves.getOrDefault(shelf_str, null);
+        if (!shelves.containsKey(shelf_str)){
+            System.out.println("No shelf for " + shelf_str + " books");
+            return null;
+        }
+        return shelves.get(shelf_str);
     }
 
     public Shelf getShelf(Integer shelf_int) {
         for(Map.Entry<String, Shelf> entry : shelves.entrySet()){
-            if(entry.getValue().getShelfNumber() == shelf_int){
+            if(entry.getValue().getShelfNumber() == shelf_int.intValue()){
                 return entry.getValue();
             }
         }
@@ -274,7 +306,7 @@ public class Library {
 
             int pages = convertInt(values[Book.PAGE_COUNT_], Code.PAGE_COUNT_ERROR);
             if (pages <= 0){
-                return Code.PAGE_COUNT_ERROR;
+                return Code.BOOK_COUNT_ERROR;
             }
 
             LocalDate tempDate = convertDate(values[Book.DUE_DATE_], Code.DATE_CONVERSION_ERROR);
@@ -426,6 +458,10 @@ public class Library {
             System.out.println(read.getName() + " doesn't have " + book.getTitle() + " checked out");
             return Code.READER_DOESNT_HAVE_BOOK_ERROR;
         }
+        if(!books.containsKey(book)){
+            return Code.BOOK_NOT_IN_INVENTORY_ERROR;
+        }
+
         System.out.println(read.getName() + " is returning " + book);
         Code c = read.removeBook(book);
         if(c == Code.SUCCESS){
